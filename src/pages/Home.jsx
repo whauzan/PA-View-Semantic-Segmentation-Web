@@ -151,7 +151,7 @@ export default function Home() {
             </div>
           </section>
           <section>
-            <div className="bg-white rounded-3xl w-7/12 absolute left-[50%] translate-x-[-50%]">
+            <div className="bg-white shadow-md rounded-3xl w-7/12 absolute left-[50%] translate-x-[-50%]">
               <div className="grid grid-cols-2 p-6">
                 <div className="bg-[#EDF4FF] rounded-md p-3 mr-3 mb-3 flex gap-4">
                   <Icon1 className="h-full w-full" />
