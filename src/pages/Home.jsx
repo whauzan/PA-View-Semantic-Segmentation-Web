@@ -9,11 +9,14 @@ import { ReactComponent as Icon5 } from "../assets/images/android2.svg";
 import { ReactComponent as Icon6 } from "../assets/images/apple.svg";
 import { ReactComponent as Icon7 } from "../assets/images/award.svg";
 import { useDropzone } from "react-dropzone";
+import { Tensor, InferenceSession } from "onnxjs";
 
 export default function Home() {
   const [isScroll, setIsScroll] = useState(false);
   const [files, setFiles] = useState([]);
   const [output, setOutput] = useState();
+
+  const session = new InferenceSession();
 
   useEffect(() => {
     const changeNavbar = () => {
@@ -39,7 +42,7 @@ export default function Home() {
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/jpg,image/png,image/jpeg",
     maxFiles: 1,
-    onDrop: (acceptedFiles) => {
+    onDrop: async (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -47,6 +50,14 @@ export default function Home() {
           })
         )
       );
+      await session.loadModel("../model/pytorch_model.onnx");
+      const inputs = [
+        new Tensor(new Float32Array([1.0, 2.0, 3.0, 4.0]), "float32", [2, 2]),
+      ];
+      const outputs = await session.run(inputs);
+      console.log(outputs);
+      const outputTensor = outputs.values().next().value;
+      console.log(outputTensor);
     },
     noDragEventsBubbling: true,
   });
